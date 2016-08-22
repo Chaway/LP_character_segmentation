@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#make;
+make;
 filenames=`ls *.jpg`
 for input_filename in $filenames
 do
