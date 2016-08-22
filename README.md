@@ -33,7 +33,7 @@ git clone https://github.com/Chaway/LP_character_segmentation.git
 ```
 cd LP_character_segmentation/
 ```
-输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 *segment* 的二进制可执行文件**
+输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 segment 的二进制可执行文件**
 ```
 cmake ./;make
 ```
