@@ -5,6 +5,7 @@
 Example
 ---
 * 单排字符车牌分割
+
    <img src="https://github.com/Chaway/LP_character_segmentation/blob/master/0000.jpg" alt="0000.jpg" width="160" height="60"> <img src="https://github.com/Chaway/LP_character_segmentation/blob/master/arrow1.png" alt="arrow1.png" width="120" height="60"> <img src="https://github.com/Chaway/LP_character_segmentation/blob/master/results/0000.jpg" alt="0000.jpg" width="160" height="60">
 
 * 双排字符车牌分割
