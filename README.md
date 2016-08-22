@@ -2,6 +2,7 @@
 -------
 该project的基于OpenCV 3.1.0，在Ubuntu 16.04环境中编写与测试。project完成了单排或双排字符车牌分割的任务。
 
+
 Example
 ---
 * 单排字符车牌分割
@@ -21,12 +22,15 @@ OpenCV配置的教程网上有许多，这里不再详细介绍，可以参考�
 - [OpenCV on GitHub](https://github.com/opencv/opencv)
 
 
+
 下载
 ------
 在终端中执行下列命令复制 ***repository*** 到本地，或者可以直接下载 ***.zip*** 格式的压缩文件
 ```
 git clone https://github.com/Chaway/LP_character_segmentation.git
 ```
+
+
 程序编译
 -------
 配置完 ***OpenCV*** 环境后，需要对程序进行编译。可以借助 ***CMake*** 工具自动生成 ***Makefile***，再使用 ***make*** 命令进行编译链接。打开终端后，切换至程序目录
@@ -38,6 +42,7 @@ cd LP_character_segmentation/
 cmake ./;make
 ```
 若要添加或删减程序文件，编译前需要相应地修改目录下的 ***CMakeLists.txt***
+
 
 运行
 -----
