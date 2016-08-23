@@ -46,9 +46,11 @@ int main(int argc,char ** argv)
     }
 
     /*将分割结果写入磁盘，路径可以自定义*/
-    string output_name = argv[1];
+    string input_name = argv[1];
+    int pos = input_name.find_last_of("/");
+    string filename = input_name.substr(pos+1); //截取文件名
     string dir = "./results/"; //输出路径
-    output_name = dir  + output_name;
+    string output_name = dir  + filename;
     imwrite(output_name,input_img);
 		
     /*显示分割结果*/
