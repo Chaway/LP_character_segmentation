@@ -22,7 +22,7 @@ void prepross_do(Mat& input_img)
 
 void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,vector<Rect>& proposal_ch,vector<Rect>& let_num,int& num_ch,int mor_times,int times)
 {
-	for (int i = 0;i < contours.size();i++)
+    for (int i = 0;i < contours.size();i++)
     {
         Rect r = boundingRect(Mat(contours[i]));  //获取轮廓的bounding box
         if(times != 0)
@@ -44,7 +44,7 @@ void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
                 {
                     if(r.x > 50)
                	    {
-                  	    //case 1:part of Chinese charecter
+                  	    //case 1:part of Chinese character
                   	    proposal_ch.push_back(r);
                     }
                 }
@@ -53,7 +53,7 @@ void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
 
         if(r.y + r.height/2 < HEIGHT_DO/2 && r.x + r.width/2 > WIDTH_DO/2 && r.width < WIDTH_DO/2 && r.height < HEIGHT_DO/2)
         {
-        	  //case 2:Letter in up line
+            //case 2:Letter in up line
             //第一排的英文字符情况比较简单，无需存入let_num
             if(r.width > 80 && r.height > 80 && r.height/r.width < 3)
             {
@@ -64,10 +64,10 @@ void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
         }
         else if(r.y + r.height/2 > HEIGHT_DO/2 && WIDTH_DO/60 < r.width && r.width < WIDTH_DO/4.0 && r.height > HEIGHT_DO/3 && r.height < HEIGHT_DO - 100)
         {
-         	if((r.x + r.width) > WIDTH_DO - 30 || r.x < 30)
-         	{
-         	   //case 3.1&3.2:left & right side letter or number charecter
-         	    if(r.height/r.width < 8 && r.width > WIDTH_DO/27 && numzero(contours[i],r) > 0.25 )
+            if((r.x + r.width) > WIDTH_DO - 30 || r.x < 30)
+            {
+                //case 3.1&3.2:left & right side letter or number character
+                if(r.height/r.width < 8 && r.width > WIDTH_DO/27 && numzero(contours[i],r) > 0.25 )
                 {
                     if(r.height/r.width < 3 || numzero(contours[i],r) < 0.8)
                     {
@@ -77,10 +77,10 @@ void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
                         num_ch++;
                     }
                 }
-         	}
+            }
             else if(r.height/(float)(r.width) < 8.0)
-         	{
-         		   //case 3.3:down center letter or number charecter
+            {
+                    //case 3.3:down center letter or number character
                 let_num.push_back(r);
                 draw_rect(r,input_img,image_co,LET_NUM);
                 //draw_rect_or(image_or,r);
@@ -96,14 +96,14 @@ void find_ch_do(vector<Rect>& proposal_ch,int& num_ch,float (&b)[2],float (&k)[2
     int size = proposal_ch.size();
     result_index = 0;
     int flag = 0;
+
     for(int i = 0 ; i < size ; i++ )
-    {
-       /*候选轮廓与回归直线的位置比较*/
-   	    if((proposal_ch[i].y  + proposal_ch[i].height - 1) >= (int)(k[0]*proposal_ch[i].x + b[0]))
-   	        if((proposal_ch[i].y  + proposal_ch[i].height - 1) >= (int)(k[0]*(proposal_ch[i].x + proposal_ch[i].width - 1) + b[0]))
-       	    {
-       	   	    continue;
-       	    }
+    {    /*候选轮廓与回归直线的位置比较*/
+        if((proposal_ch[i].y  + proposal_ch[i].height - 1) >= (int)(k[0]*proposal_ch[i].x + b[0]))
+            if((proposal_ch[i].y  + proposal_ch[i].height - 1) >= (int)(k[0]*(proposal_ch[i].x + proposal_ch[i].width - 1) + b[0]))
+            {
+                continue;
+            }
 
         flag ++ ;
 
@@ -135,12 +135,14 @@ void segment_double(Mat& input_img)
     Mat image_co = input_img.clone();
     cvtColor(input_img,input_img,COLOR_GRAY2BGR);//将预处理后的图像重新转换为RGB三通道（方便在图像上画出彩色的矩形框）
 
-	vector< vector< Point> >  contours;//存放检测到的轮廓
-	Mat element = getStructuringElement(MORPH_CROSS,Size(ELE_WIDTH,ELE_HEIGHT));//定义腐蚀模板
-	vector<Rect> proposal_ch;//存放汉字的候选子区域
-	  int flag_ch = 0;//进行过中文字符合并的标志
+    vector< vector< Point> >  contours;//存放检测到的轮廓
+    Mat element = getStructuringElement(MORPH_CROSS,Size(ELE_WIDTH,ELE_HEIGHT));//定义腐蚀模板
+    vector<Rect> proposal_ch;//存放汉字的候选子区域
+    
+    int flag_ch = 0;//进行过中文字符合并的标志
     int num_ch = 0;//找到的字符个数
     int mor_times = 0; //腐蚀次数
+    
     for(int times = 0 ; times < MAX_TIMES ; times ++)
     {
         Mat temp_co = image_co.clone(); //下一步调用findContours时会对输入图像进行变换，为了保留image_co的数据
@@ -152,15 +154,12 @@ void segment_double(Mat& input_img)
         if(num_ch >= 3 && flag_ch == 0)
         {
             flag_ch = 1;
-          	int result_index;//记录中文字符bounding box的位置
+            int result_index;//记录中文字符bounding box的位置
             float b[2]={0};//字符区域上下边界直线的截距
             float k[2]={0};//字符区域上下边界直线的斜率
-            //get par of two lines
+            
             linear_regression(let_num,b,k);//最小二乘法拟合出第二排字符区域上下边界
-            //cout << "(b,k) = " << b[0] <<" " << k[0] << "  " <<  b[1] <<" " << k[1] <<endl;
-            //line(background_for_allcon, Point(1,(int)a[0]), Point(image.cols,(int)(b[0]*image.cols + a[0])), Scalar(0,255,0),3,LINE_AA);
-            // line(background_for_allcon, Point(1,(int)a[1]), Point(image.cols,(int)(b[1]*image.cols + a[1])), Scalar(0,255,0),3,LINE_AA);
-
+            
             find_ch_do(proposal_ch,num_ch,b,k,result_index); //得出中文字符的外接矩形框
 
             if(result_index != proposal_ch.size())

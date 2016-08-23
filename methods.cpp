@@ -55,8 +55,8 @@ void drawHist(Mat& src,string& s_temp)
         int intensity = cvRound(bin_val*hist_height/max_val);
 
         rectangle(hist_img,Point(i*scale,hist_height-1),
-            Point((i+1)*scale - 1, hist_height - intensity),
-            Scalar(255));
+        Point((i+1)*scale - 1, hist_height - intensity),
+        Scalar(255));
     }
 
 }
@@ -125,18 +125,18 @@ void remove_rivet(Mat& image_thresh,int& upline,int& downline)
 /*在原始输入图像上画出矩形框*/
 void draw_rect_or(Mat& image_or,Rect& r,int COLS,int ROWS)
 {
-  Rect re_temp;
-  re_temp.x = (int)((float)(r.x*image_or.cols)/COLS);
-  re_temp.y = (int)((float)(r.y*image_or.rows)/ROWS);
-  re_temp.width = (int)((float)(r.width*image_or.cols)/COLS);
-  re_temp.height = (int)((float)(r.height*image_or.rows)/ROWS);
-  rectangle(image_or,re_temp,Scalar(255,0,255),1);
+    Rect re_temp;
+    re_temp.x = (int)((float)(r.x*image_or.cols)/COLS);
+    re_temp.y = (int)((float)(r.y*image_or.rows)/ROWS);
+    re_temp.width = (int)((float)(r.width*image_or.cols)/COLS);
+    re_temp.height = (int)((float)(r.height*image_or.rows)/ROWS);
+    rectangle(image_or,re_temp,Scalar(255,0,255),1);
 }
 
 /*不同类型的字符画出不同颜色的矩形框*/
 void draw_rect(Rect& r,Mat& input_img,Mat& image_co,int character_class)
 {
-       switch(character_class){
+    switch(character_class){
                      case CH:
                           rectangle(input_img, r, Scalar(0,255,255),3);
                           break;
@@ -146,59 +146,56 @@ void draw_rect(Rect& r,Mat& input_img,Mat& image_co,int character_class)
                      default:
                           cout << "draw bounding box error" << endl;
                      };
-
-      image_co(Range(r.y - 1,r.y + r.height - 1),Range(r.x - 1,r.x + r.width - 1)).setTo(Scalar(0));
+    image_co(Range(r.y - 1,r.y + r.height - 1),Range(r.x - 1,r.x + r.width - 1)).setTo(Scalar(0));
      //对矩形框内的区域清零
  }
 
 /*合并两个矩形框*/
 void merge(Rect & subr1,Rect & subr2)//merge two rectangle
 {
-
-	int x1 = (subr1.x < subr2.x) ? subr1.x :subr2.x;
-	int y1 = (subr1.y < subr2.y) ? subr1.y :subr2.y;
-	int x2 = (subr1.x + subr1.width > subr2.x + subr2.width) ? subr1.x + subr1.width :subr2.x + subr2.width;
-	int y2 = (subr1.y + subr1.height > subr2.y + subr2.height) ? subr1.y + subr1.height :subr2.y + subr2.height;
-  subr1.x = x1;
-  subr1.y = y1;
-  subr1.width = x2 - x1;
-  subr1.height = y2 - y1;
+    int x1 = (subr1.x < subr2.x) ? subr1.x :subr2.x;
+    int y1 = (subr1.y < subr2.y) ? subr1.y :subr2.y;
+    int x2 = (subr1.x + subr1.width > subr2.x + subr2.width) ? subr1.x + subr1.width :subr2.x + subr2.width;
+    int y2 = (subr1.y + subr1.height > subr2.y + subr2.height) ? subr1.y + subr1.height :subr2.y + subr2.height;
+    subr1.x = x1;
+    subr1.y = y1;
+    subr1.width = x2 - x1;
+    subr1.height = y2 - y1;
 }
 
 
 /*最小二乘拟合直线*/
 void linear_regression(vector <Rect> & let_num,float (&a)[2],float (&b)[2])
 {
-   int size = let_num.size();
-   int sum_xy[2]= {0};
-   int sum_x_sq[2] = {0};
-   int sum_x[2] = {0};
-   int sum_y[2] = {0};
-   float x_aver[2];
-   float y_aver[2];
-   //forlefttup points and leftdown points
-   for(int i = 0;i < size;i++)
-   {
-   	 sum_xy[0] += (let_num[i].x )*(let_num[i].y);
-   	 sum_xy[1] += (let_num[i].x + let_num[i].width - 1)*(let_num[i].y + let_num[i].height - 1);
-   	 sum_x_sq[0] += (let_num[i].x)*(let_num[i].x);
-   	 sum_x_sq[1] += (let_num[i].x  + let_num[i].width - 1)*(let_num[i].x  + let_num[i].width - 1);
-   	 sum_x[0] += let_num[i].x;
-   	 sum_x[1] += let_num[i].x + let_num[i].width - 1;
-   	 sum_y[0] += let_num[i].y;
-   	 sum_y[1] += let_num[i].y + let_num[i].height - 1;
-   }
+    int size = let_num.size();
+    int sum_xy[2]= {0};
+    int sum_x_sq[2] = {0};
+    int sum_x[2] = {0};
+    int sum_y[2] = {0};
+    float x_aver[2];
+    float y_aver[2];
+    for(int i = 0;i < size;i++)
+    {
+        sum_xy[0] += (let_num[i].x )*(let_num[i].y);
+        sum_xy[1] += (let_num[i].x + let_num[i].width - 1)*(let_num[i].y + let_num[i].height - 1);
+        sum_x_sq[0] += (let_num[i].x)*(let_num[i].x);
+        sum_x_sq[1] += (let_num[i].x  + let_num[i].width - 1)*(let_num[i].x  + let_num[i].width - 1);
+        sum_x[0] += let_num[i].x;
+        sum_x[1] += let_num[i].x + let_num[i].width - 1;
+        sum_y[0] += let_num[i].y;
+        sum_y[1] += let_num[i].y + let_num[i].height - 1;
+    }
 
     x_aver[0] = sum_x[0]/(float)size;
     x_aver[1] = sum_x[1]/(float)size;
     y_aver[0] = sum_y[0]/(float)size;
     y_aver[1] = sum_y[1]/(float)size;
 
-   b[0] = (sum_xy[0] - size*x_aver[0]*y_aver[0])/(sum_x_sq[0] - size*x_aver[0]*x_aver[0]);
-   a[0] = y_aver[0] - b[0]*x_aver[0];
+    b[0] = (sum_xy[0] - size*x_aver[0]*y_aver[0])/(sum_x_sq[0] - size*x_aver[0]*x_aver[0]);
+    a[0] = y_aver[0] - b[0]*x_aver[0];
 
-   b[1] = (sum_xy[1] - size*x_aver[1]*y_aver[1])/(sum_x_sq[1] - size*x_aver[1]*x_aver[1]);
-   a[1] = y_aver[1] - b[1]*x_aver[1];
+    b[1] = (sum_xy[1] - size*x_aver[1]*y_aver[1])/(sum_x_sq[1] - size*x_aver[1]*x_aver[1]);
+    a[1] = y_aver[1] - b[1]*x_aver[1];
 
 
 }

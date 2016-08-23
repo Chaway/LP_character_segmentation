@@ -14,7 +14,6 @@ int main(int argc,char ** argv)
 {
     Mat input_img;
     input_img = imread(argv[1]);          //读取input image
-
     if(!input_img.data)
     {
     	cout << "Open input image failed,please check input image!" << endl;
@@ -51,11 +50,10 @@ int main(int argc,char ** argv)
     string dir = "./results/"; //输出路径
     output_name = dir  + output_name;
     imwrite(output_name,input_img);
-    
+		
     /*显示分割结果*/
     imshow("Input image", input_img);
     cout << "Press any key to exit.." << endl;
     waitKey();
-    
     return 0;
 }
