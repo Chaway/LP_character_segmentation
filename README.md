@@ -1,6 +1,6 @@
 车牌字符分割(License Plate Character Segmentation)
 -------
-该project的基于OpenCV 3.1.0，在Ubuntu 16.04环境中编写与测试。project完成了单排或双排字符车牌分割的任务。
+该 **project** 实现了单排或双排字符车牌分割的功能。  **project** 基于 **OpenCV 3.1.0**，在 **Ubuntu 16.04** 环境中完成编写与测试，所以在使用程序时需要先配置好 **OpenCV 3.1.0**，配置方法可以参考下面列出的链接。此外，程序在 **Linux** 下详细的使用方法也可以参考下面的教程。
 
 
 Example
@@ -14,9 +14,9 @@ Example
    <img src="https://github.com/Chaway/LP_character_segmentation/blob/master/0308.jpg" alt="0308.jpg" width="160" height="120"> <img src="https://github.com/Chaway/LP_character_segmentation/blob/master/arrows/arrow2.png" alt="arrow2.png" width="120" height="120"><img src="https://github.com/Chaway/LP_character_segmentation/blob/master/results/0308.jpg" alt="0308.jpg" width="160" height="120">
 
 
-Ubuntu 16.04下OpenCV环境配置
+Ubuntu 16.04 下 OpenCV 环境配置
 ------
-OpenCV配置的教程网上有许多，这里不再详细介绍，可以参考以下链接
+**OpenCV** 配置的教程网上有许多，这里不再详细介绍，可以参考以下链接
 - [Tutorial linux install](http://docs.opencv.org/3.1.0/d7/d9f/tutorial_linux_install.html)
 - [Install opencv 3.0 and python 2.7 on ubuntu](http://www.pyimagesearch.com/2015/06/22/install-opencv-3-0-and-python-2-7-on-ubuntu/)
 - [OpenCV on GitHub](https://github.com/opencv/opencv)
@@ -37,7 +37,7 @@ git clone https://github.com/Chaway/LP_character_segmentation.git
 ```
 cd LP_character_segmentation/
 ```
-输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 *segment* 的二进制可执行文件**
+在终端输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 *segment* 的二进制可执行文件**
 ```
 cmake ./;make
 ```
@@ -57,12 +57,12 @@ cmake ./;make
 
 - **批量分割**
 
-  ***bash*** 脚本 ***run.sh*** 可以对目录下的所有 ****.jpg*** 文件进行分割（若要分割其它格式的图像，只需将 ***run.sh*** 中的 “jpg” 改成对应的格式后缀），批量分割时可以将 ***segment.cpp*** 中显示分割结果的部分代码注释掉
+  ***bash*** 脚本 ***run.sh*** 可以对 ***image*** 目录下的所有车牌图像进行分割，批量分割时可以将 ***segment.cpp*** 中显示分割结果的部分代码注释掉
 
 ```
 ./run.sh
 ```
-分割结果保存在当目录下的 ***results*** 目录中。
+分割结果保存在当前目录下的 ***results*** 目录中。
 
 
 
