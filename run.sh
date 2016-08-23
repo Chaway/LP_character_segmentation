@@ -1,6 +1,6 @@
 #! /bin/sh
 make;
-filenames=`ls ./image/`
+filenames=`ls ./images/`
 for input_filename in $filenames
 do
 	echo $input_filename
