@@ -33,11 +33,11 @@ git clone https://github.com/Chaway/LP_character_segmentation.git
 
 程序编译
 -------
-配置完 ***OpenCV*** 环境后，需要对程序进行编译。可以借助 ***CMake*** 工具自动生成 ***Makefile***，再使用 ***make*** 命令进行编译链接。打开终端后，切换至程序目录
+配置完 ***OpenCV*** 环境后，需要对程序进行编译。可以借助 ***CMake*** 工具自动生成 ***Makefile***，再使用 ***make*** 命令进行编译链接。在终端中进入程序所在目录
 ```
 cd LP_character_segmentation/
 ```
-在终端输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 *segment* 的二进制可执行文件**
+然后在终端输入下列命令即可编译完成，**编译成功后会在目录下生成文件名为 *segment* 的二进制可执行文件**
 ```
 cmake ./;make
 ```
