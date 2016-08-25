@@ -1,6 +1,6 @@
 /*
 project description:
-   License plate charecter segmentation based on OpenCV 3.1.0
+   License plate character segmentation based on OpenCV 3.1.0
    基于OpenCV 3.1.0的车牌字符分割，使用方法详见README.md
 version 0.1.0
 
