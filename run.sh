@@ -10,4 +10,6 @@
  #        extension=${input_filename##*.}
  #       ./segment $filename $extension
         ./segment ${dir}${input_filename}                                             
+	printf "\n"
  done
+
