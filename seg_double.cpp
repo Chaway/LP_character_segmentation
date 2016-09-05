@@ -11,7 +11,7 @@ using namespace std;
 using namespace cv;
 
 
-void prepross_do(Mat& input_img)
+void preprocess_do(Mat &input_img)
 {
     cvtColor(input_img,input_img,COLOR_BGR2GRAY); //RGB图像转为灰度图像
     resize(input_img,input_img,Size(WIDTH_DO,HEIGHT_DO)); //线性插值大小归一化
@@ -46,6 +46,7 @@ void filter_do(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
                	    {
                   	    //case 1:part of Chinese character
                   	    proposal_ch.push_back(r);
+                        rect_zero(image_co,r);
                     }
                 }
             }
@@ -128,9 +129,9 @@ void find_ch_do(vector<Rect>& proposal_ch,int& num_ch,float (&b)[2],float (&k)[2
 /*
   双排字符图像分割，与单排分割的主要区别在于filter_do筛选方法，总的分割流程相同
 */
-void segment_double(Mat& input_img)
+int segment_double(Mat& input_img)
 {
-    prepross_do(input_img); //图像预处理
+    preprocess_do(input_img); //图像预处理
 
     Mat image_co = input_img.clone();
     cvtColor(input_img,input_img,COLOR_GRAY2BGR);//将预处理后的图像重新转换为RGB三通道（方便在图像上画出彩色的矩形框）
@@ -138,7 +139,8 @@ void segment_double(Mat& input_img)
     vector< vector< Point> >  contours;//存放检测到的轮廓
     Mat element = getStructuringElement(MORPH_CROSS,Size(ELE_WIDTH,ELE_HEIGHT));//定义腐蚀模板
     vector<Rect> proposal_ch;//存放汉字的候选子区域
-    
+    vector<Rect> let_num; //存放第二排的数字和英文字符
+
     int flag_ch = 0;//进行过中文字符合并的标志
     int num_ch = 0;//找到的字符个数
     int mor_times = 0; //腐蚀次数
@@ -147,7 +149,7 @@ void segment_double(Mat& input_img)
     {
         Mat temp_co = image_co.clone(); //下一步调用findContours时会对输入图像进行变换，为了保留image_co的数据
         findContours(temp_co,contours,RETR_EXTERNAL,CHAIN_APPROX_NONE); //寻找输入图像的轮廓，轮廓存放在contours中（调用库函数）
-        vector<Rect> let_num; //存放第二排的数字和英文字符
+
 
         filter_do(image_co,input_img,contours,proposal_ch,let_num,num_ch,mor_times,times);//筛选字符区域
 
@@ -170,6 +172,7 @@ void segment_double(Mat& input_img)
             else
             {
                  cout << "Can't find Chinese character!" << endl;
+                 return num_ch;
             }
         }
         else
@@ -179,10 +182,11 @@ void segment_double(Mat& input_img)
             mor_times ++;
         }
 
-        if(num_ch >= 7)
+        if(num_ch == 7)
         {
             //cout << "times = " << times << endl;
             break;
         }
     }
+    return num_ch;
 }

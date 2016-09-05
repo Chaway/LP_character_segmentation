@@ -15,7 +15,7 @@ using namespace cv;
 /*
    图像预处理
 */
-void prepross_si(Mat& input_img)
+void preprocess_si(Mat& input_img)
 {
     cvtColor(input_img,input_img,COLOR_BGR2GRAY);  //RGB图像转为灰度图像
     resize(input_img,input_img,Size(WIDTH_SI,HEIGHT_SI)); //线性插值大小归一化
@@ -53,6 +53,7 @@ void filter_si(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
               	        if(r.height/r.width < 3 && numzero(contours[i],r) > 0.35)  //比例和面积比先验信息
                         {
                             proposal_ch.push_back(r);
+                            rect_zero(image_co,r);
               	        }
                     }
                     else
@@ -61,6 +62,7 @@ void filter_si(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
                         if(r.height/r.width < 3)
                         {
                             proposal_ch.push_back(r);
+                            rect_zero(image_co,r);
                         }
                     }
                 }
@@ -68,6 +70,8 @@ void filter_si(Mat& image_co,Mat& input_img,vector< vector< Point> >& contours,v
                 {
                     //case 1.4:proposal region
                 	proposal_ch.push_back(r);
+                    rect_zero(image_co,r);
+                    continue; //防止与右边字符重复分割
                 }
             }
         }
@@ -144,37 +148,37 @@ void find_ch_si(vector<Rect>& proposal_ch,int& num_ch,float (&b)[2],float (&k)[2
    	    //cout << "can't find Chinese character!" << endl;
         result_index = size;
     }
-
-    num_ch ++;
+    else
+        num_ch ++;
 }
 
 
 /*
   单排字符图像分割
 */
-void segment_single(Mat& input_img)
+int segment_single(Mat& input_img)
 {
-    prepross_si(input_img);   //图像预处理
+    preprocess_si(input_img);   //图像预处理
     Mat image_co = input_img.clone();  //复制图像数据
     cvtColor(input_img,input_img,COLOR_GRAY2BGR); //将预处理后的图像重新转换为RGB三通道（方便在图像上画出彩色的矩形框）
 
     vector< vector< Point> >  contours;  //存放检测到的轮廓
     Mat element = getStructuringElement(MORPH_CROSS,Size(ELE_WIDTH,ELE_HEIGHT)); //定义腐蚀模板
     vector<Rect> proposal_ch;  //存放汉字的候选子区域
+    vector<Rect> let_num; //存放数字和英文字
 
     int flag_ch = 0; //进行过中文字符合并的标志
-    int num_ch = 0;  //找到的字符个数
     int mor_times = 0; //腐蚀次数
+    int num_ch = 0;  //找到的字符个数
 
     for(int times = 0;times < MAX_TIMES;times ++)
     {
         Mat temp_co = image_co.clone();  //下一步调用findContours时会对输入图像进行变换，为了保留image_co的数据
         findContours(temp_co,contours,RETR_EXTERNAL,CHAIN_APPROX_NONE); //寻找输入图像的轮廓，轮廓存放在contours中（调用库函数）
-        vector<Rect> let_num; //存放数字和英文字符
 
         filter_si(image_co,input_img,contours,proposal_ch,let_num,num_ch,mor_times,times); //筛选字符区域
 
-        if(num_ch >= 4 && flag_ch == 0)
+        if(num_ch >= 4  && flag_ch == 0)
         {
             flag_ch = 1;
             int result_index;//记录中文字符bounding box的位置
@@ -196,6 +200,7 @@ void segment_single(Mat& input_img)
             else
             {
             	cout << "Can't find Chinese character!" << endl;
+                return num_ch;
             }
         }
         else
@@ -205,10 +210,12 @@ void segment_single(Mat& input_img)
             mor_times ++;
         }
 
-        if(num_ch >= 7)
+        if(num_ch == 7)
         {
             //cout << "times = " << times << endl;
             break;
         }
     }
+
+    return num_ch;
 }

@@ -8,10 +8,14 @@ using namespace cv;
 
 int judge_type(Mat image)
 {
-	if(image.cols/(float)image.rows > 1.8)
+    float ratio = image.cols/(float)image.rows;
+    cout << "width/height = " << ratio << endl;
+	if(ratio > 1.9)
 		return SINGLE;
-	else
+	else if(ratio < 1.7)
 		return DOUBLE;
+    else
+        return UNCERTAIN;
 }
 
 
@@ -146,9 +150,16 @@ void draw_rect(Rect& r,Mat& input_img,Mat& image_co,int character_class)
                      default:
                           cout << "draw bounding box error" << endl;
                      };
-    image_co(Range(r.y - 1,r.y + r.height - 1),Range(r.x - 1,r.x + r.width - 1)).setTo(Scalar(0));
-     //对矩形框内的区域清零
+   rect_zero(image_co,r);
+    imwrite("/workspace/LP_character_segmentation/test.jpg",image_co);
+    imwrite("/workspace/LP_character_segmentation/input_img.jpg",input_img);
  }
+/*对矩形框内的区域清零*/
+void rect_zero(Mat& img,Rect r)
+{
+    img(Range(r.y - 1,r.y + r.height - 1),Range(r.x - 1,r.x + r.width - 1)).setTo(Scalar(0));
+}
+
 
 /*合并两个矩形框*/
 void merge(Rect & subr1,Rect & subr2)//merge two rectangle
@@ -231,18 +242,20 @@ float numzero(vector< Point> & contour,Rect & r)   //area of while
 /*边界两侧清零*/
 void setzero(Mat& image_co,float (&b)[2],float (&k)[2])
 {
-  for(int cols = 0 ; cols < image_co.cols ; cols ++)
-  {
-        for(int rows = 0 ; rows <= (cols*k[0] + b[0]) ; rows ++)
-        {
-            image_co.at<uchar>(rows,cols) = 0;
-        }
+        for (int cols = 0; cols < image_co.cols; cols++) {
+            for (int rows = 0; rows < (int) (cols * k[0] + b[0]); rows++) {
+                if(rows == image_co.rows)
+                {
+                    cout << "Eorror in setzero" << endl;
+                    return;
+                }
+                image_co.at<uchar>(rows, cols) = 0;
+            }
 
-        for(int rows = (int)(cols*k[1] + b[1]) ; rows < image_co.rows ; rows ++)
-        {
-             image_co.at<uchar>(rows,cols) = 0;
+            for (int rows = (int) (cols * k[1] + b[1]); rows < image_co.rows; rows++) {
+                image_co.at<uchar>(rows, cols) = 0;
+            }
         }
-  }
 
 }
 
