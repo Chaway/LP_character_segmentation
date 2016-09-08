@@ -26,7 +26,7 @@ int main(int argc,char ** argv)
     int num_si = 0 , num_do = 0;
     /*
 		   判断输入车牌图像是单排字符图像还是双排字符图像，然后根据判断结果进行分割
-		*/
+	*/
     switch(type)
     {
     	case SINGLE:
@@ -49,6 +49,7 @@ int main(int argc,char ** argv)
                   cout << "Segmentation fail" << endl;
                   return -1;
               }
+              cout << "Segmentation success" << endl;
     	      break;
 
         case UNCERTAIN:

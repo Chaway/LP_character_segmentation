@@ -10,12 +10,38 @@ int judge_type(Mat image)
 {
     float ratio = image.cols/(float)image.rows;
     cout << "width/height = " << ratio << endl;
-	if(ratio > 1.9)
+	if(ratio >= 2)
 		return SINGLE;
-	else if(ratio < 1.7)
+	else if(ratio <= 1.7)
 		return DOUBLE;
     else
         return UNCERTAIN;
+}
+
+int judge_color(Mat img)
+{
+    int sum1 = 0 ,sum2 = 0;
+    for(int row = 0;row < img.rows ;row++ )
+      for(int col = 0;col < img.cols ; col++)
+      {
+          if(img.at<uchar>(row,col) > 180)
+              sum1 ++;
+          if(img.at<uchar>(row,col) < 75)
+              sum2 ++;
+      }
+    cout << (float)sum1 / (img.rows*img.cols) << endl;
+    cout << (float)sum2 / (img.rows*img.cols) << endl;
+
+    if(sum1 < img.rows*img.cols)
+    {
+        cout << "BLUEWHITE" << endl;
+        return BLUEWHITE;
+    }
+    else
+    {
+        cout << "BLACKYELLOW" << endl;
+        return BLACKYELLOW;
+    }
 }
 
 
@@ -151,9 +177,10 @@ void draw_rect(Rect& r,Mat& input_img,Mat& image_co,int character_class)
                           cout << "draw bounding box error" << endl;
                      };
    rect_zero(image_co,r);
-    imwrite("/workspace/LP_character_segmentation/test.jpg",image_co);
-    imwrite("/workspace/LP_character_segmentation/input_img.jpg",input_img);
+    //imwrite("/workspace/LP_character_segmentation/test.jpg",image_co);
+    //imwrite("/workspace/LP_character_segmentation/input_img.jpg",input_img);
  }
+
 /*对矩形框内的区域清零*/
 void rect_zero(Mat& img,Rect r)
 {

@@ -13,13 +13,14 @@
 #define ELE_HEIGHT 10  //腐蚀模板的高度
 #define CH 1 //中文字符标志
 #define LET_NUM 2  //数字字符或英文字符标志
-
+#define BLUEWHITE 0
+#define BLACKYELLOW 1
 
 
 
 
 int judge_type(cv::Mat);  //判断输入车牌类型
-
+int judge_color(cv::Mat); //判断输入车牌颜色类型
 int segment_single(cv::Mat&);  //单排字符车牌分割函数
 //void find_ch_si(std::vector<cv::Rect> & proposal_ch,int & num_ch,float (&b)[2],float (&k)[2],int & result_index); //merge boxes of proposal
 int segment_double(cv::Mat&);  //双排字符车牌分割函数

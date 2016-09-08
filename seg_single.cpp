@@ -7,7 +7,7 @@
 #define WIDTH_SI 1050 //车牌归一化处理宽度
 #define HEIGHT_SI 300  //车牌归一化处理高度
 #define THRESHOLD_SI 180  //二值化处理阈值
-
+#define THRESHOLD_SI_INV 75 //二值化处理阈值
 using namespace std;
 using namespace cv;
 
@@ -20,7 +20,10 @@ void preprocess_si(Mat& input_img)
     cvtColor(input_img,input_img,COLOR_BGR2GRAY);  //RGB图像转为灰度图像
     resize(input_img,input_img,Size(WIDTH_SI,HEIGHT_SI)); //线性插值大小归一化
     equalizeHist(input_img,input_img); //直方图均衡化处理
-    threshold(input_img,input_img,THRESHOLD_SI,255,CV_THRESH_BINARY); //阈值化处理
+    //int color_type = judge_color(input_img);
+    //threshold(input_img, input_img, color_type == BLUEWHITE ? THRESHOLD_SI :THRESHOLD_SI_INV,
+    //                   255,color_type == BLUEWHITE ? CV_THRESH_BINARY : CV_THRESH_BINARY_INV);
+    threshold(input_img,input_img,THRESHOLD_SI,255,CV_THRESH_BINARY);
     //imwrite("./thresh_si.jpg",input_img);
 }
 
