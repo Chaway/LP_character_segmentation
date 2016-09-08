@@ -18,6 +18,7 @@ using namespace cv;
 void preprocess_si(Mat& input_img)
 {
     cvtColor(input_img,input_img,COLOR_BGR2GRAY);  //RGB图像转为灰度图像
+    //int color_type = judge_color(input_img);
     resize(input_img,input_img,Size(WIDTH_SI,HEIGHT_SI)); //线性插值大小归一化
     equalizeHist(input_img,input_img); //直方图均衡化处理
     //int color_type = judge_color(input_img);

@@ -24,24 +24,28 @@ int judge_color(Mat img)
     for(int row = 0;row < img.rows ;row++ )
       for(int col = 0;col < img.cols ; col++)
       {
-          if(img.at<uchar>(row,col) > 180)
+          if(img.at<uchar>(row,col) < 180)
               sum1 ++;
           if(img.at<uchar>(row,col) < 75)
               sum2 ++;
       }
-    cout << (float)sum1 / (img.rows*img.cols) << endl;
+    float ratio1 = (float)sum1 / (img.rows*img.cols);
+    cout << ratio1 << endl;
     cout << (float)sum2 / (img.rows*img.cols) << endl;
-
-    if(sum1 < img.rows*img.cols)
+    if(ratio1 < 0.68 || ratio1 > 0.72)
     {
-        cout << "BLUEWHITE" << endl;
-        return BLUEWHITE;
+        cout << "out of range" << endl;
     }
-    else
-    {
-        cout << "BLACKYELLOW" << endl;
-        return BLACKYELLOW;
-    }
+//    if(sum1 < img.rows*img.cols)
+//    {
+//        cout << "BLUEWHITE" << endl;
+//        return BLUEWHITE;
+//    }
+//    else
+//    {
+//        cout << "BLACKYELLOW" << endl;
+//        return BLACKYELLOW;
+//    }
 }
 
 
